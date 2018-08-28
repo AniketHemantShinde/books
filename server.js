@@ -23,12 +23,13 @@ var Book = mongoose.model('Book', bookSchema)
 
 
 
-app.post('/books', (request, response) => {
+app.post('/api/books', (request, response) => {
     console.log(request.body)
     const book = new Book({
         name: request.body.name,
-        author:request.body.author,
-        surname:request.body.surname
+        author: request.body.author,
+        surname: request.body.surname
+
     })
     book.save().then((book) => {
         console.log('Added successfully')
@@ -38,4 +39,25 @@ app.post('/books', (request, response) => {
 
 })
 
+
+app.del('/api/books/:id', (request, response) => {
+    Book.deleteOne({ _id: request.params._id }, function (err) { });
+    response.json({
+        message: 'Id deleted',
+    })
+})
 app.listen(3000, () => console.log('Express server at 3000'))
+
+app.get('/api/books/life', (request, response) => {
+   Book.find({name: 'Life',},function (err, docs) {});
+   response.json({
+       message:'Found',
+   })
+})
+
+app.put('/api/books',(request,response)=>{
+    Book.update({name:'Life'},{author:'Aniket'},function(err,data){});
+    response.json({
+        message:'Updated',
+    })
+})
